@@ -1,0 +1,142 @@
+.budget-page {
+    padding: 20px;
+    max-width: 900px;
+    margin: 20px auto;
+}
+
+.budget-page h1 {
+    text-align: center;
+    color: var(--primary-color); /* Assuming you have a primary color variable */
+    margin-bottom: 30px;
+}
+
+.budget-form-section,
+.current-budgets-section {
+    background-color: var(--card-bg-color); /* Assuming a card background color */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    margin-bottom: 30px;
+}
+
+.budget-form-section h2,
+.current-budgets-section h2 {
+    color: var(--text-color);
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+.budget-form .form-group {
+    margin-bottom: 15px;
+}
+
+.budget-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: var(--text-color-light);
+}
+
+.budget-form input[type="text"],
+.budget-form input[type="number"],
+.budget-form input[type="date"],
+.budget-form select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--input-bg-color);
+    color: var(--text-color);
+    box-sizing: border-box; /* Ensures padding doesn't increase width */
+}
+
+.budget-form button.btn-primary {
+    background-color: var(--button-primary-bg); /* Use your existing button styles */
+    color: var(--button-primary-text);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+.budget-form button.btn-primary:hover {
+    background-color: var(--button-primary-hover-bg);
+}
+
+.budgets-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.budget-item {
+    background-color: var(--background-color); /* Lighter background for items */
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+.budget-item h3 {
+    margin-top: 0;
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+}
+
+.budget-item p {
+    margin: 5px 0;
+    color: var(--text-color-light);
+}
+
+.budget-progress-bar-container {
+    width: 100%;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    margin-top: 15px;
+    overflow: hidden; /* Ensures bar stays within bounds */
+}
+
+.budget-progress-bar {
+    height: 20px;
+    border-radius: 5px;
+    text-align: center;
+    color: white;
+    line-height: 20px; /* Center text vertically */
+    transition: width 0.5s ease-in-out, background-color 0.5s ease-in-out;
+}
+
+.budget-item .progress-text {
+    text-align: right;
+    font-weight: bold;
+    margin-top: 5px;
+    color: var(--text-color);
+}
+
+/* Alert messages */
+.alert {
+    padding: 10px 20px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}

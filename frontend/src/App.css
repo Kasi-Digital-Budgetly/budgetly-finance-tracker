@@ -1,0 +1,275 @@
+/* ---------------------------------------------
+  App.css – Global styles for Budgetly
+---------------------------------------------- */
+
+/* ---------- Root Theme Variables ---------- */
+:root {
+  /* Primary Colors */
+  --primary-color: #3B82F6;
+  --primary-color-dark: #2563EB;
+  --primary-color-light: #60A5FA;
+  --navbar-light: #f8fafc;
+   --navbar-dark: #1e293b;
+  --danger-color: #EF4444;
+  --danger-color-dark: #DC2626;
+
+
+  /* Success */
+  --success-color: #10B981;
+  --success-color-dark: #059669;
+  --success-color-light: #34D399;
+
+  /* Danger */
+  --danger-color: #EF4444;
+  --danger-color-dark: #DC2626;
+  --danger-color-light: #F87171;
+
+  /* Warning */
+  --warning-color: #FBBF24;
+  --warning-color-dark: #F59E0B;
+
+  /* Grayscale */
+  --gray-100: #F3F4F6;
+  --gray-200: #E5E7EB;
+  --gray-300: #D1D5DB;
+  --gray-400: #9CA3AF;
+  --gray-500: #6B7280;
+  --gray-600: #4B5563;
+  --gray-700: #374151;
+  --gray-800: #1F2937;
+  --gray-900: #111827;
+
+  /* Base UI */
+  --background-color: #f9fafb;
+  --card-bg-color: #ffffff;
+  --input-bg-color: #ffffff;
+  --text-color: var(--gray-800);
+  --text-color-light: var(--gray-600);
+  --text-color-inverted: #ffffff;
+  --border-color: var(--gray-300);
+
+  /* Buttons */
+  --button-primary-bg: var(--primary-color);
+  --button-primary-hover-bg: var(--primary-color-dark);
+  --button-primary-text: var(--text-color-inverted);
+
+  --button-green-bg: var(--success-color);
+  --button-green-hover-bg: var(--success-color-dark);
+  --button-green-text: var(--text-color-inverted);
+
+  --button-red-bg: var(--danger-color);
+  --button-red-hover-bg: var(--danger-color-dark);
+  --button-red-text: var(--text-color-inverted);
+
+  --button-secondary-bg: var(--gray-200);
+  --button-secondary-hover-bg: var(--gray-300);
+  --button-secondary-text: var(--gray-900);
+
+  /* Pills / Tags */
+  --category-pill-bg: var(--gray-200);
+  --category-pill-text: var(--gray-800);
+
+  /* Fonts */
+  --font-family-sans: "Inter", system-ui, sans-serif;
+}
+
+/* ---------- Dark Mode Overrides ---------- */
+html.dark-mode {
+  --background-color: #111827;
+  --card-bg-color: #1f2937;
+  --input-bg-color: #374151;
+
+  --text-color: #E5E7EB;
+  --text-color-light: #D1D5DB;
+  --text-color-inverted: #111827;
+
+  --border-color: #4B5563;
+
+  --primary-color: #60A5FA;
+  --primary-color-dark: #3B82F6;
+  --primary-color-light: #93C5FD;
+
+  --button-primary-text: #ffffff;
+  --button-green-text: #ffffff;
+  --button-red-text: #ffffff;
+  --button-secondary-text: var(--gray-100);
+
+  --category-pill-bg: var(--gray-700);
+  --category-pill-text: var(--gray-100);
+}
+
+/* ---------- Base Reset ---------- */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family-sans);
+  /* New gradient background */
+  background: radial-gradient(circle at top left, #f0f9ff 0%, #e0f2fe 50%, #f9fafb 100%);
+  color: var(--text-color);
+  line-height: 1.5;
+  transition: background 0.4s ease, color 0.3s ease;
+}
+
+html.dark-mode body {
+  background: radial-gradient(circle at bottom right, #0f172a 0%, #1e293b 60%, #111827 100%);
+}
+
+
+/* ---------- Links ---------- */
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+a:hover {
+  color: var(--primary-color-dark);
+  text-decoration: underline;
+}
+
+/* ---------- Forms ---------- */
+input, select, textarea {
+  font-family: var(--font-family-sans);
+  color: var(--text-color);
+  background-color: var(--input-bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* ---------- Utility ---------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* ---------- Card ---------- */
+.card {
+  background-color: var(--card-bg-color);
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+  padding: 1.5rem;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* ---------- Animations ---------- */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.animate-fadeInUp {
+  animation: fadeInUp 0.7s ease-out forwards;
+  opacity: 0;
+}
+.animate-fadeIn {
+  animation: fadeIn 1s ease-out forwards;
+  opacity: 0;
+}
+.delay-100  { animation-delay: 0.1s; }
+.delay-200  { animation-delay: 0.2s; }
+.delay-300  { animation-delay: 0.3s; }
+.delay-400  { animation-delay: 0.4s; }
+.delay-500  { animation-delay: 0.5s; }
+.delay-600  { animation-delay: 0.6s; }
+.delay-700  { animation-delay: 0.7s; }
+.delay-800  { animation-delay: 0.8s; }
+.delay-900  { animation-delay: 0.9s; }
+.delay-1000 { animation-delay: 1s; }
+
+/* ---------- Buttons ---------- */
+.btn-primary {
+  background-color: var(--button-primary-bg);
+  color: var(--button-primary-text);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+.btn-primary:hover {
+  background-color: var(--button-primary-hover-bg);
+  color: var(--primary-color-light);
+}
+.btn-secondary {
+  background-color: var(--button-secondary-bg);
+  color: var(--button-secondary-text);
+  border: 1px solid var(--border-color);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+.btn-secondary:hover {
+  background-color: var(--button-secondary-hover-bg);
+  border-color: var(--gray-500);
+  color: var(--primary-color);
+}
+html.dark-mode .btn-secondary {
+  background-color: var(--gray-700);
+  color: var(--gray-100);
+}
+html.dark-mode .btn-secondary:hover {
+  background-color: var(--gray-600);
+}
+
+/* ---------- Category Pill ---------- */
+.category-pill {
+  background-color: var(--category-pill-bg);
+  color: var(--category-pill-text);
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.3rem 0.8rem;
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+  border: 1px solid var(--border-color);
+}
+.category-pill:hover {
+  background-color: var(--gray-300);
+}
+.category-pill button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 0.25rem;
+  margin-left: 0.25rem;
+  font-size: 0.7rem;
+  color: var(--text-color-light);
+  transition: color 0.2s ease;
+}
+.category-pill button:hover {
+  color: var(--danger-color);
+}

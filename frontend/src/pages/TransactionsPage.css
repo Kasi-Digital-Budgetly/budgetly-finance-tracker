@@ -1,0 +1,311 @@
+/* frontend/src/pages/TransactionsPage.css */
+
+.transactions-page-container {
+  background: radial-gradient(circle at top left, #f0f9ff, #e0f2fe 60%, #f9fafb 100%);
+  padding: 2rem 1rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--text-color);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Dark mode variant */
+html.dark-mode .transactions-page-container {
+  background: radial-gradient(circle at bottom right, #0f172a, #1e293b 60%, #111827 100%);
+}
+
+
+
+.transaction-item {
+  background-color: var(--card-bg-color); /* Use global card background variable */
+  border: 1px solid var(--border-color); /* Use global border color variable */
+  border-radius: 0.75rem; /* Slightly more rounded corners */
+  padding: 1.25rem; /* Increased padding for better spacing and to accommodate buttons */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+  position: relative; /* Needed for absolutely positioned buttons */
+  transition: all 0.2s ease-in-out; /* Smooth transition for hover effects */
+}
+
+.transaction-item:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* More pronounced shadow on hover */
+  transform: translateY(-3px); /* Lift effect on hover */
+}
+
+/* Wrapper for transaction details to ensure space for action buttons */
+.transaction-item .content-wrapper {
+    padding-right: 4.5rem; /* Space for absolute positioned buttons */
+}
+
+/* Styling for the action buttons (Edit, Delete) within transaction items */
+.transaction-item .action-buttons {
+    position: absolute;
+    top: 0.75rem; /* Adjusted top for better vertical alignment */
+    right: 0.75rem; /* Adjusted right for better horizontal alignment */
+    display: flex;
+    gap: 0.5rem; /* Space between buttons */
+    align-items: center;
+}
+
+.transaction-btn {
+  font-weight: 500;
+  font-size: 0.875rem; /* Slightly smaller font for more compact buttons */
+  padding: 0.4rem 0.6rem; /* Padding for the buttons */
+  border-radius: 0.25rem; /* Small rounding */
+  cursor: pointer;
+  transition: all 0.2s ease; /* Smooth transition for hover effects */
+  text-decoration: none; /* Ensure no underline by default */
+  display: inline-flex; /* To align icon and text, if any */
+  align-items: center; /* Center content vertically */
+  justify-content: center; /* Center content horizontally */
+}
+
+/* Specific styles for transaction buttons (Edit, Delete) in list, overriding App.css global buttons if necessary */
+.transaction-btn.text-blue-600 {
+    color: var(--primary-color-dark); /* Use global var for consistent blue */
+    background-color: transparent; /* No background by default */
+}
+.transaction-btn.text-blue-600:hover {
+    color: var(--primary-color);
+    background-color: rgba(59, 130, 246, 0.1); /* Subtle hover background */
+}
+.transaction-btn.text-red-600 {
+    color: var(--danger-color); /* Use global var for consistent red */
+    background-color: transparent; /* No background by default */
+}
+.transaction-btn.text-red-600:hover {
+    color: var(--danger-color-dark);
+    background-color: rgba(239, 68, 68, 0.1); /* Subtle hover background */
+}
+
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* Increased gap within form groups */
+  margin-bottom: 1rem; /* Add margin below each form group for consistent spacing */
+}
+
+.form-group label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-color); /* Use global text color variable */
+}
+
+.card {
+  background-color: var(--card-bg-color); /* Use global card background variable */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* More prominent shadow for cards */
+  border-radius: 0.75rem; /* Consistent border radius */
+  padding: 1.5rem;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 2.5rem; /* Increased gap between card forms */
+}
+
+.card:last-child {
+    margin-bottom: 0; /* Remove margin from the last card to prevent excessive space at the bottom */
+}
+
+
+.card input,
+.card select,
+.card textarea {
+  border: 1px solid var(--border-color); /* Use global border color variable */
+  padding: 0.75rem 1rem; /* Slightly more padding for inputs */
+  border-radius: 0.5rem; /* More rounded input fields */
+  font-size: 0.95rem;
+  background-color: var(--input-bg-color); /* Use global input background variable */
+  color: var(--text-color); /* Use global text color variable */
+  transition: all 0.2s ease;
+}
+
+.card input:focus,
+.card select:focus,
+.card textarea:focus {
+  outline: none;
+  border-color: var(--primary-color); /* Use global primary color for focus */
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); /* Enhanced focus ring */
+}
+
+.card button {
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem; /* Consistent button padding */
+  border-radius: 0.5rem; /* Consistent button rounding */
+}
+
+.card button:disabled {
+  opacity: 0.6; /* Slightly more visible disabled state */
+  cursor: not-allowed;
+  filter: grayscale(30%); /* Subtle grayscale for disabled */
+}
+
+.category-pill {
+  background-color: var(--gray-200); /* Use a global gray for pill background */
+  color: var(--text-color); /* Use global text color for pill text */
+  font-size: 0.8rem; /* Slightly smaller font for pills */
+  font-weight: 500;
+  padding: 0.3rem 0.8rem; /* Adjusted padding for pills */
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+  border: 1px solid var(--border-color); /* Add a subtle border for definition */
+}
+
+.category-pill:hover {
+  background-color: var(--gray-300); /* Darker on hover */
+}
+
+/* Styling for the delete button within category pill */
+.category-pill button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0 0.25rem; /* Minimal padding */
+    margin-left: 0.25rem; /* Space from text */
+    font-size: 0.7rem; /* Make icon smaller */
+    color: var(--gray-600); /* Default trash icon color */
+    transition: color 0.2s ease;
+}
+
+.category-pill button:hover {
+    color: var(--danger-color); /* Red on hover, using global danger color */
+}
+
+
+/* Reusable buttons - updated to use CSS variables for consistency */
+.btn-primary {
+  background-color: var(--button-primary-bg);
+  color: var(--button-primary-text);
+  border: none;
+  padding: 0.75rem 1.5rem; /* Consistent padding */
+  border-radius: 0.5rem; /* Consistent rounding */
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--button-primary-hover-bg);
+}
+
+.btn-secondary {
+  background-color: var(--button-secondary-bg);
+  color: var(--button-secondary-text);
+  border: 1px solid var(--border-color); /* Add border for secondary buttons */
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background-color: var(--button-secondary-hover-bg);
+  border-color: var(--gray-500);
+}
+
+/* Responsive adjustments for mobile view */
+@media (max-width: 768px) {
+  .transactions-page-container {
+    padding: 1.5rem 0.5rem; /* Adjusted padding for smaller screens */
+  }
+  .transaction-item .action-buttons {
+    position: static; /* Make buttons stack below content on small screens */
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    margin-top: 0.75rem; /* Add space above buttons when stacked */
+    padding: 0; /* Remove any extra padding */
+  }
+  .transaction-item .content-wrapper {
+      padding-right: 0; /* Remove right padding if buttons are static */
+  }
+  .card {
+    padding: 1rem; /* Smaller padding for cards on mobile */
+  }
+  .card button {
+    width: 100%; /* Full width buttons in forms on mobile */
+  }
+  /* For the button container at the bottom of the form */
+  .card .flex.gap-2.mt-4 {
+      flex-direction: column; /* Stack submit/clear buttons vertically */
+      gap: 0.75rem; /* Gap between stacked buttons */
+  }
+}
+/* ---------------------------------
+   Popup Edit Card (Floating Form)
+---------------------------------- */
+.popup-edit-card {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1050;
+  background-color: var(--card-bg-color);
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+  width: 95%;
+  max-width: 420px;
+  animation: fadeInUp 0.4s ease-out forwards;
+  border: 1px solid var(--border-color);
+}
+
+html.dark-mode .popup-edit-card {
+  background-color: var(--card-bg-color);
+  box-shadow: 0 10px 20px rgba(255, 255, 255, 0.05);
+}
+
+/* ---------------------------------
+   Edit Feedback Message
+---------------------------------- */
+.popup-edit-card p {
+  animation: fadeIn 0.5s ease;
+  color: var(--primary-color);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+/* Fallback Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 30px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+/* ------------------------------
+   Edit Mode Styling Enhancements
+------------------------------- */
+
+/* Highlight card during edit mode */
+.transaction-form.edit-mode {
+  border-left: 4px solid var(--primary-color);
+  animation: fadeInHighlight 0.3s ease-in-out;
+  background-color: var(--card-edit-bg-color, rgba(59,130,246,0.05)); /* Optional override */
+}
+
+@keyframes fadeInHighlight {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Edit summary below form heading */
+.transaction-edit-summary {
+  font-size: 0.875rem;
+  color: var(--text-muted-color, #6b7280); /* Default to Tailwind's gray-500 */
+  margin-bottom: 0.75rem;
+  font-style: italic;
+  animation: fadeIn 0.3s ease-in-out;
+}
