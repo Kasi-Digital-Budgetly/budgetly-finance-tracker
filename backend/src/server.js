@@ -24,6 +24,8 @@ app.use(express.json());
 // ✅ CORS setup for both local dev and production
 // src/server.js
 
+import cors from 'cors';
+
 const allowedOrigins = [
   'http://localhost:5173',
   'https://kasi-budgetly.netlify.app',
@@ -31,16 +33,11 @@ const allowedOrigins = [
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS: ' + origin));
-      }
-    },
+    origin: allowedOrigins,
     credentials: true,
   })
 );
+
 
 
 
