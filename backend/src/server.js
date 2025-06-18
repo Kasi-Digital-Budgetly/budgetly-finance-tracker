@@ -20,7 +20,11 @@ connectDB();
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+//app.use(cors());
+app.use(cors({
+  origin: 'https://kasi-budgetly.netlify.app',
+  credentials: true,
+}));
 
 // Define a simple root route for testing
 app.get('/', (req, res) => {
