@@ -1,27 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import './HomePage.css'; // Dedicated styling
+import './HomePage.css';
 
 function HomePage() {
   const user = useSelector((state) => state.auth.user);
   const isAuthenticated = !!user;
   const [greeting, setGreeting] = useState('');
 
+  // Debug: log user on each render
+  console.log('Current user object:', user);
+
   useEffect(() => {
     document.title = 'Budgetly - Home';
 
     const updateGreeting = () => {
       const hour = new Date().getHours();
-      if (hour < 12) setGreeting('Good Morning');
-      else if (hour < 18) setGreeting('Good Afternoon');
-      else setGreeting('Good Evening');
+      let baseGreeting = '';
+
+      if (hour < 12) baseGreeting = 'Good Morning';
+      else if (hour < 18) baseGreeting = 'Good Afternoon';
+      else baseGreeting = 'Good Evening';
+
+      // Pick user display name - adjust here if your user object uses a different key
+      const displayName =
+      user?.user?.username || user?.user?.name || user?.user?.fullName || 'there';
+
+
+      setGreeting(`${baseGreeting}, ${displayName}!`);
     };
 
     updateGreeting();
-    const interval = setInterval(updateGreeting, 3600000); // hourly update
+    const interval = setInterval(updateGreeting, 3600000);
     return () => clearInterval(interval);
-  }, []);
+  }, [user]);
 
   return (
     <div className="relative w-full overflow-hidden">
@@ -39,10 +51,7 @@ function HomePage() {
       {/* Main Content */}
       <div className="home-page-container relative z-10">
         <h2 className="text-3xl font-semibold mb-3 text-gray-700 dark:text-gray-300 animate-fadeInUp delay-100">
-          <span className="animated-greeting">{greeting},</span>{' '}
-          <span className="animated-greeting delay-200">
-            {isAuthenticated ? user?.username : 'there'}!
-          </span>
+          <span className="animated-greeting">{greeting}</span>
         </h2>
 
         <h1 className="hero-title animate-fadeInUp delay-200">

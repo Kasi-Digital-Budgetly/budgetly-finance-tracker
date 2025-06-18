@@ -79,7 +79,8 @@ const Navbar = () => {
                     <MdAnalytics className="icon" /> Analytics
                   </NavLink>
                 </li>
-                <li><span className="navbar__welcome">Hi, {user?.username}</span></li>
+                <li><span className="navbar__welcome">Hi, {user?.user?.username}</span></li>
+
                 <li>
                   <button
                     className="navbar__btn"
@@ -147,7 +148,7 @@ const Navbar = () => {
                   <MdAnalytics className="icon" /> Analytics
                 </NavLink>
               </li>
-              <li className="sidebar__welcome">Hi, {user?.username}</li>
+              <li className="sidebar__welcome">Hi, {user?.user?.username}</li>
               <li>
                 <button
                   className="navbar__btn"
