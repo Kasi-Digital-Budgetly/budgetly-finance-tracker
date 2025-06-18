@@ -1,4 +1,3 @@
-// backend/src/server.js
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -21,7 +20,7 @@ connectDB();
 // Middleware
 app.use(express.json());
 
-// ✅ Correct CORS setup for both local dev and deployed frontend
+// CORS setup for local dev and production frontend
 const allowedOrigins = [
   'http://localhost:5173',
   'https://kasi-budgetly.netlify.app',
@@ -29,13 +28,14 @@ const allowedOrigins = [
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      // Allow requests with no origin (like Postman) or from whitelisted origins
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS: ' + origin));
+    origin: function(origin, callback) {
+      // allow requests with no origin like mobile apps or curl requests
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
+        return callback(new Error(msg), false);
       }
+      return callback(null, true);
     },
     credentials: true,
   })
@@ -46,7 +46,7 @@ app.get('/', (req, res) => {
   res.send('API is running...');
 });
 
-// Routes
+// API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/categories', categoryRoutes);
