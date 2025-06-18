@@ -8,7 +8,7 @@ import categoryRoutes from './routes/categories.js';
 import budgetRoutes from './routes/budgets.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
-// Load environment variables
+// Load env variables
 dotenv.config();
 console.log('SERVER STARTUP DEBUG: JWT_SECRET from .env:', process.env.JWT_SECRET);
 
@@ -17,10 +17,10 @@ const app = express();
 // Connect to MongoDB
 connectDB();
 
-// Middleware
+// Parse incoming JSON
 app.use(express.json());
 
-// CORS setup for local dev and production frontend
+// ✅ CORS configuration for dev + production
 const allowedOrigins = [
   'http://localhost:5173',
   'https://kasi-budgetly.netlify.app',
@@ -28,34 +28,37 @@ const allowedOrigins = [
 
 app.use(
   cors({
-    origin: function(origin, callback) {
-      // allow requests with no origin like mobile apps or curl requests
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) === -1) {
-        const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
-        return callback(new Error(msg), false);
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(
+          new Error(`❌ CORS error: Origin ${origin} not allowed.`),
+          false
+        );
       }
-      return callback(null, true);
     },
     credentials: true,
   })
 );
 
-// Test route
+// Root route
 app.get('/', (req, res) => {
   res.send('API is running...');
 });
 
-// API routes
+// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/budgets', budgetRoutes);
 
-// Error middleware
+// Custom error handlers
 app.use(notFound);
 app.use(errorHandler);
 
 // Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () =>
+  console.log(`✅ Server running on port ${PORT}`)
+);
