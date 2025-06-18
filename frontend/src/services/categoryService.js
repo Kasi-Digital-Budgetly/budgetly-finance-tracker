@@ -1,5 +1,3 @@
-// frontend/src/services/categoryService.js
-
 import axios from '../api/axios'; // Import your configured Axios instance
 
 /**
@@ -31,9 +29,39 @@ const createCategory = async (categoryName) => {
   }
 };
 
-// You can add more functions here for updateCategory, deleteCategory if needed later
+/**
+ * Updates a category by its ID.
+ * @param {string} categoryId - The ID of the category to update.
+ * @param {string} newName - The new name for the category.
+ * @returns {Promise<Object>} A promise that resolves to the updated category object.
+ */
+const updateCategory = async (categoryId, newName) => {
+  try {
+    const response = await axios.put(`/categories/${categoryId}`, { name: newName });
+    return response.data;
+  } catch (error) {
+    console.error('Error updating category:', error.response?.data || error.message);
+    throw error;
+  }
+};
+
+/**
+ * Deletes a category by its ID.
+ * @param {string} categoryId - The ID of the category to delete.
+ * @returns {Promise<void>} A promise that resolves when the deletion is complete.
+ */
+const deleteCategory = async (categoryId) => {
+  try {
+    await axios.delete(`/categories/${categoryId}`);
+  } catch (error) {
+    console.error('Error deleting category:', error.response?.data || error.message);
+    throw error;
+  }
+};
 
 export {
   fetchCategories,
-  createCategory
+  createCategory,
+  updateCategory,
+  deleteCategory,
 };
