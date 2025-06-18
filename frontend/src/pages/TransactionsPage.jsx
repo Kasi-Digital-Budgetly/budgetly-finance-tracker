@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from 'react';
-import axios from '../api/axios'; // Keep axios for category management if not moving to Redux slice for categories yet
 import Modal from '../components/Modal';
 import './TransactionsPage.css';
 import { FaTrashAlt } from 'react-icons/fa';

@@ -1,12 +1,8 @@
-import axios from 'axios';
-
-const API_URL = 'http://localhost:5000/api/auth/'; // Ensure this matches your backend URL
+import api from '../api/axios'; // your configured axios instance
 
 // Register user
-// UPDATE THIS FUNCTION SIGNATURE AND DATA SENT
 const register = async (username, email, password) => {
-  const response = await axios.post(API_URL + 'register', { username, email, password });
-  // If registration is successful, store user data and token in localStorage
+  const response = await api.post('/auth/register', { username, email, password });
   if (response.data.token) {
     localStorage.setItem('user', JSON.stringify(response.data));
   }
@@ -15,7 +11,7 @@ const register = async (username, email, password) => {
 
 // Login user
 const login = async (username, password) => {
-  const response = await axios.post(API_URL + 'login', { username, password });
+  const response = await api.post('/auth/login', { username, password });
   if (response.data.token) {
     localStorage.setItem('user', JSON.stringify(response.data));
   }

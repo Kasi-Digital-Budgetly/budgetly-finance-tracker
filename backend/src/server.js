@@ -6,45 +6,59 @@ import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import transactionRoutes from './routes/transactions.js';
 import categoryRoutes from './routes/categories.js';
-import budgetRoutes from './routes/budgets.js'; // <-- NEW: Import budget routes
+import budgetRoutes from './routes/budgets.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
-// Load environment variables from .env file
+// Load environment variables
 dotenv.config();
 console.log('SERVER STARTUP DEBUG: JWT_SECRET from .env:', process.env.JWT_SECRET);
 
 const app = express();
 
-// Connect to the database
+// Connect to MongoDB
 connectDB();
 
 // Middleware
 app.use(express.json());
-//app.use(cors());
-app.use(cors({
-  origin: 'https://kasi-budgetly.netlify.app',
-  credentials: true,
-}));
+
+// ✅ CORS setup for both local dev and production
+// src/server.js
+
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://kasi-budgetly.netlify.app',
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS: ' + origin));
+      }
+    },
+    credentials: true,
+  })
+);
 
 
 
-// Define a simple root route for testing
+// Test route
 app.get('/', (req, res) => {
   res.send('API is running...');
 });
 
-// API Routes
+// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/categories', categoryRoutes);
-app.use('/api/budgets', budgetRoutes); // <-- NEW: Use budget routes
+app.use('/api/budgets', budgetRoutes);
 
-// Error handling middleware functions
+// Error middleware
 app.use(notFound);
 app.use(errorHandler);
 
-// Define the port to listen on
+// Start server
 const PORT = process.env.PORT || 5000;
-
-// Start the server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
