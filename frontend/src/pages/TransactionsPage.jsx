@@ -14,6 +14,7 @@ import {
   updateTransaction, // from transactionSlice
   deleteTransaction, // from transactionSlice
 } from '../features/transactions/transactionSlice'; // FIXED: Changed to 'transactionSlice' (singular)
+import { toast } from 'react-toastify';
 
 function TransactionsPage() {
   const dispatch = useDispatch();
@@ -31,9 +32,7 @@ function TransactionsPage() {
     notes: '',
   });
   const [newCategoryName, setNewCategoryName] = useState('');
-  // Removed local loading and error states as they are now managed by Redux slices
-  // const [loading, setLoading] = useState(true);
-  // const [error, setError] = useState(null);
+
 
   // Modal states for all alerts/confirms
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -90,12 +89,7 @@ function TransactionsPage() {
       await dispatch(addCategory({ name: trimmedName })).unwrap();
       setNewCategoryName('');
       dispatch(fetchCategories()); // Refresh categories after adding
-      setModalContent({
-        title: 'Success',
-        message: 'Category added successfully!',
-        type: 'alert',
-        onConfirm: null,
-      });
+      toast.success('Category added successfully!');  // Show toast on success
     } catch (err) {
       console.error('Failed to add category:', err);
       setModalContent({
@@ -104,152 +98,155 @@ function TransactionsPage() {
         type: 'alert',
         onConfirm: null,
       });
+      setIsModalOpen(true); // Show modal only on error
     } finally {
       setIsAddingCategory(false);
-      setIsModalOpen(true);
     }
+
   };
 
 
   const handleSubmit = async (e) => {
-    console.log('--- handleSubmit triggered! ---');
-    e.preventDefault();
-    console.log('handleSubmit called. FormData:', formData);
-    const { _id, ...dataToSubmit } = formData;
-    console.log('Data to submit:', dataToSubmit);
+  console.log('--- handleSubmit triggered! ---');
+  e.preventDefault();
+  console.log('handleSubmit called. FormData:', formData);
+  const { _id, ...dataToSubmit } = formData;
+  console.log('Data to submit:', dataToSubmit);
 
-    if (formData.type === 'expense' && !formData.category) {
-      setModalContent({
-        title: 'Missing Information',
-        message: 'Please select a category for expenses.',
-        type: 'alert',
-        onConfirm: null,
-      });
-      setIsModalOpen(true);
-      return;
+  if (formData.type === 'expense' && !formData.category) {
+    setModalContent({
+      title: 'Missing Information',
+      message: 'Please select a category for expenses.',
+      type: 'alert',
+      onConfirm: null,
+    });
+    setIsModalOpen(true);
+    return;
+  }
+
+  try {
+    if (_id) {
+      // Dispatch Redux thunk for updating transaction
+      await dispatch(updateTransaction({ id: _id, data: dataToSubmit })).unwrap();
+      toast.success('Transaction updated successfully!');
+    } else {
+      // Dispatch Redux thunk for adding transaction
+      await dispatch(addTransaction(dataToSubmit)).unwrap();
+      toast.success('Transaction added successfully!');
     }
 
-    try {
-      if (_id) {
-        // Dispatch Redux thunk for updating transaction
-        await dispatch(updateTransaction({ id: _id, data: dataToSubmit })).unwrap();
-      } else {
-        // Dispatch Redux thunk for adding transaction
-        await dispatch(addTransaction(dataToSubmit)).unwrap();
-      }
+    resetForm();
 
-      resetForm();
-      // No need to call fetchTransactions() directly here,
-      // the thunks' fulfilled actions will update the state.
-      // However, if you want immediate re-sort or filter, you might refetch
-      // For now, relying on Redux store updates.
-
-      setModalContent({
-        title: 'Success',
-        message: _id ? 'Transaction updated successfully!' : 'Transaction added successfully!',
-        type: 'alert',
-        onConfirm: null,
-      });
-    } catch (err) {
-      console.error('Failed to save transaction:', err);
-      setModalContent({
-        title: 'Error',
-        message: err.message || err.response?.data?.message || 'Error saving transaction.',
-        type: 'alert',
-        onConfirm: null,
-      });
-    } finally {
-      setIsModalOpen(true);
-      console.log('Modal should now be open!');
-    }
-  };
+    setModalContent({
+      title: 'Success',
+      message: _id ? 'Transaction updated successfully!' : 'Transaction added successfully!',
+      type: 'alert',
+      onConfirm: null,
+    });
+  } catch (err) {
+    console.error('Failed to save transaction:', err);
+    toast.error(err.message || err.response?.data?.message || 'Error saving transaction.');
+    setModalContent({
+      title: 'Error',
+      message: err.message || err.response?.data?.message || 'Error saving transaction.',
+      type: 'alert',
+      onConfirm: null,
+    });
+  } finally {
+    setIsModalOpen(true);
+    console.log('Modal should now be open!');
+  }
+};
 
   const handleDelete = (id) => {
-    console.log("handleDelete called for transaction ID:", id);
-    setModalContent({
-      title: 'Confirm Deletion',
-      message: `Are you sure you want to delete this transaction with ID: ${id}?`,
-      type: 'confirm',
-      onConfirm: async () => {
-        console.log("onConfirm for delete triggered for transaction ID:", id);
-        try {
-          // Dispatch Redux thunk for deleting transaction
-          await dispatch(deleteTransaction(id)).unwrap();
-          // No need to call fetchTransactions() directly here
-          setModalContent({
-            title: 'Deleted',
-            message: 'Transaction deleted successfully!',
-            type: 'alert',
-            onConfirm: null,
-          });
-        } catch (err) {
-          console.error('Delete failed in onConfirm:', err);
-          setModalContent({
-            title: 'Error',
-            message: err.message || err.response?.data?.message || 'Error deleting transaction.',
-            type: 'alert',
-            onConfirm: null,
-          });
-        } finally {
-            setIsModalOpen(true);
-        }
-      },
-    });
-
-    setIsModalOpen(true);
-    console.log("TransactionsPage: Setting isModalOpen to TRUE.");
-  };
-
-
-  const handleDeleteCategory = (categoryId, categoryName) => {
-    deleteCategoryRef.current = async () => {
+  console.log("handleDelete called for transaction ID:", id);
+  setModalContent({
+    title: 'Confirm Deletion',
+    message: `Are you sure you want to delete this transaction with ID: ${id}?`,
+    type: 'confirm',
+    onConfirm: async () => {
+      console.log("onConfirm for delete triggered for transaction ID:", id);
       try {
-        // Dispatch Redux thunk for deleting category
-        await dispatch(deleteCategory(categoryId)).unwrap();
+        // Dispatch Redux thunk for deleting transaction
+        await dispatch(deleteTransaction(id)).unwrap();
+
+        toast.success('Transaction deleted successfully!');
+
         setModalContent({
-          title: 'Category Deleted',
-          message: `Category "${categoryName}" deleted successfully!`,
+          title: 'Deleted',
+          message: 'Transaction deleted successfully!',
           type: 'alert',
           onConfirm: null,
         });
       } catch (err) {
-        console.error('Failed to delete category:', err);
+        console.error('Delete failed in onConfirm:', err);
+        toast.error(err.message || err.response?.data?.message || 'Error deleting transaction.');
         setModalContent({
           title: 'Error',
-          message: err.message || err.response?.data?.message || 'Failed to delete category.',
+          message: err.message || err.response?.data?.message || 'Error deleting transaction.',
           type: 'alert',
           onConfirm: null,
         });
       } finally {
         setIsModalOpen(true);
       }
-    };
+    },
+  });
 
-    setModalContent({
-      title: 'Confirm Category Deletion',
-      message: `Are you sure you want to delete the category "${categoryName}"? This cannot be undone.`,
-      type: 'confirm',
-      onConfirm: deleteCategoryRef.current,
-    });
+  setIsModalOpen(true);
+  console.log("TransactionsPage: Setting isModalOpen to TRUE.");
+};
 
-    setIsModalOpen(true);
+
+ const handleDeleteCategory = (categoryId, categoryName) => {
+  deleteCategoryRef.current = async () => {
+    try {
+      // Dispatch Redux thunk for deleting category
+      await dispatch(deleteCategory(categoryId)).unwrap();
+      toast.success(`Category "${categoryName}" deleted successfully!`);
+    } catch (err) {
+      console.error('Failed to delete category:', err);
+      setModalContent({
+        title: 'Error',
+        message: err.message || err.response?.data?.message || 'Failed to delete category.',
+        type: 'alert',
+        onConfirm: null,
+      });
+      setIsModalOpen(true);
+    }
   };
+
+  setModalContent({
+    title: 'Confirm Category Deletion',
+    message: `Are you sure you want to delete the category "${categoryName}"? This cannot be undone.`,
+    type: 'confirm',
+    onConfirm: deleteCategoryRef.current,
+  });
+
+  setIsModalOpen(true);
+};
+
 
 
   const handleEdit = (tx) => {
-    setFormData({
-      type: tx.type,
-      amount: tx.amount,
-      category: tx.category,
-      date: tx.date.slice(0, 10),
-      notes: tx.notes || '',
-      _id: tx._id,
-    });
+  setFormData({
+    type: tx.type,
+    amount: tx.amount,
+    category: tx.category,
+    date: tx.date.slice(0, 10),
+    notes: tx.notes || '',
+    _id: tx._id,
+  });
 
-    setTimeout(() => {
-      formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
-  };
+  toast.info('Editing transaction...');
+
+  setTimeout(() => {
+    formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const amountInput = formRef.current?.querySelector('input[name="amount"]');
+    amountInput?.focus();
+  }, 100);
+};
+
 
   const resetForm = () => {
     setFormData({

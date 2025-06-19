@@ -11,6 +11,8 @@ import ResetPassword from './pages/ResetPassword'; // ✅ NEW
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './contexts/AuthContext';
 import './App.css';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
@@ -23,23 +25,45 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} /> {/* ✅ NEW */}
           <Route path="/" element={<HomePage />} />
-          <Route path="/transactions" element={
-            <ProtectedRoute>
-              <TransactionsPage />
-            </ProtectedRoute>
-          } />
-          <Route path="/analytics" element={
-            <ProtectedRoute>
-              <AnalyticsPage />
-            </ProtectedRoute>
-          } />
-          <Route path="/budget" element={
-            <ProtectedRoute>
-              <BudgetPage />
-            </ProtectedRoute>
-          } />
+          <Route
+            path="/transactions"
+            element={
+              <ProtectedRoute>
+                <TransactionsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/analytics"
+            element={
+              <ProtectedRoute>
+                <AnalyticsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/budget"
+            element={
+              <ProtectedRoute>
+                <BudgetPage />
+              </ProtectedRoute>
+            }
+          />
           <Route path="*" element={<p>Page Not Found</p>} />
         </Routes>
+        {/* ToastContainer added globally here */}
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored" // optional: 'light', 'dark', 'colored'
+        />
       </AuthProvider>
     </Router>
   );

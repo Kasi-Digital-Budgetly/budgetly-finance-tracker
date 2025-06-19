@@ -148,8 +148,7 @@ const Navbar = () => {
                   <MdAnalytics className="icon" /> Analytics
                 </NavLink>
               </li>
-              <li className="sidebar__welcome">Hi, {user?.user?.username}</li>git push heroku main
-
+              <li className="sidebar__welcome">Hi, {user?.user?.username}</li>
               <li>
                 <button
                   className="navbar__btn"

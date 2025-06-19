@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { fetchCategories } from '../services/categoryService';
 import axios from '../api/axios'; // Import axios for API calls
+import { toast } from 'react-toastify';  // <-- added toast import
 import './BudgetPage.css'; // Create this CSS file for styling
 
 const BudgetPage = () => {
@@ -21,9 +22,6 @@ const BudgetPage = () => {
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
 
-  // Removed all Gemini API related states and functions
-
-
   // Function to fetch all categories
   useEffect(() => {
     const getCategories = async () => {
@@ -34,6 +32,7 @@ const BudgetPage = () => {
       } catch (err) {
         setError("Failed to fetch categories.");
         console.error("Error fetching categories:", err);
+        toast.error("Failed to fetch categories."); // toast error
       }
     };
     getCategories();
@@ -49,6 +48,7 @@ const BudgetPage = () => {
     } catch (err) {
       setError("Failed to fetch budgets. Please ensure your backend is running.");
       console.error("Error fetching budgets:", err);
+      toast.error("Failed to fetch budgets. Please ensure your backend is running."); // toast error
     } finally {
       setLoading(false);
     }
@@ -61,16 +61,15 @@ const BudgetPage = () => {
       setTransactions(res.data);
     } catch (err) {
       console.error("Failed to fetch transactions for tips:", err);
-      // Don't set global error here, just log, as budget fetch might succeed
+      // no toast here as budgets fetch might still succeed
     }
   };
-
 
   // Fetch budgets and transactions when the component mounts or auth state changes
   useEffect(() => {
     if (isAuthenticated) {
       fetchBudgets();
-      fetchTransactions(); // Fetch transactions here
+      fetchTransactions();
     } else {
       setLoading(false);
     }
@@ -91,10 +90,12 @@ const BudgetPage = () => {
 
     if (!isAuthenticated) {
       setError("You must be logged in to set a budget.");
+      toast.error("You must be logged in to set a budget."); // toast error
       return;
     }
     if (!newBudget.category || !newBudget.amount || !newBudget.startDate || !newBudget.endDate) {
       setError("Please fill in all budget fields.");
+      toast.error("Please fill in all budget fields."); // toast error
       return;
     }
 
@@ -103,15 +104,16 @@ const BudgetPage = () => {
       console.log('Budget creation response:', response.data);
       setNewBudget({ category: '', amount: '', startDate: '', endDate: '' });
       setMessage("Budget set successfully!");
+      toast.success("Budget set successfully!"); // toast success
       setError(null);
-      fetchBudgets(); // Re-fetch budgets to update the list
-      fetchTransactions(); // Re-fetch transactions in case new budget impacts tips
+      fetchBudgets();
+      fetchTransactions();
       setTimeout(() => setMessage(null), 3000);
     } catch (err) {
       console.error('Error setting budget:', err.response?.data || err.message);
-      setError(err.response?.data?.message || 'Failed to set budget. Please try again.');
-    } finally {
-        // Ensure this block runs even if there's an error in the try block
+      const errorMsg = err.response?.data?.message || 'Failed to set budget. Please try again.';
+      setError(errorMsg);
+      toast.error(errorMsg); // toast error
     }
   };
 
@@ -128,7 +130,7 @@ const BudgetPage = () => {
   const calculateProgress = (budget) => {
     if (budget.amount === 0) return 0;
     const spentPercentage = (budget.spent / budget.amount) * 100;
-    return Math.min(spentPercentage, 100); // Cap at 100%
+    return Math.min(spentPercentage, 100);
   };
 
   // Calculate total income and expenses for the tip
@@ -157,7 +159,6 @@ const BudgetPage = () => {
     }
   };
 
-
   if (!isAuthenticated) {
     return (
       <div className="budget-page container">
@@ -182,8 +183,6 @@ const BudgetPage = () => {
 
       {error && <div className="alert alert-danger">{error}</div>}
       {message && <div className="alert alert-success">{message}</div>}
-
-      {/* Removed Gemini API Key Input Section entirely */}
 
       <section className="budget-form-section card">
         <h2>Set New Budget</h2>
@@ -260,7 +259,14 @@ const BudgetPage = () => {
                 <div className="budget-progress-bar-container">
                   <div
                     className="budget-progress-bar"
-                    style={{ width: `${calculateProgress(budget)}%`, backgroundColor: calculateProgress(budget) > 90 ? 'var(--danger-color)' : (calculateProgress(budget) > 70 ? 'var(--warning-color)' : 'var(--success-color)') }}
+                    style={{
+                      width: `${calculateProgress(budget)}%`,
+                      backgroundColor: calculateProgress(budget) > 90
+                        ? 'var(--danger-color)'
+                        : (calculateProgress(budget) > 70
+                          ? 'var(--warning-color)'
+                          : 'var(--success-color)')
+                    }}
                   ></div>
                 </div>
                 <p className="progress-text">{calculateProgress(budget).toFixed(1)}% Spent</p>
@@ -270,15 +276,13 @@ const BudgetPage = () => {
         )}
       </section>
 
-      {/* Static Budget Optimization Tips Section */}
       <section className="budget-tips-section card">
         <h2>Budget Optimization Tips ✨</h2>
         <div className="mt-4 p-4 bg-gray-50 rounded-md border border-gray-200 whitespace-pre-wrap text-sm">
           <h3 className="font-semibold text-lg mb-2">Your Personalized Tip:</h3>
-          <p>{getSimpleBudgetTip()}</p> {/* Displays the static tip */}
+          <p>{getSimpleBudgetTip()}</p>
         </div>
       </section>
-
     </div>
   );
 };

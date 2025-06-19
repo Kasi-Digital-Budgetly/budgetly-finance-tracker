@@ -14,7 +14,7 @@ export const ThemeProvider = ({ children }) => {
 
   // Effect to apply the theme class to the document's <html> element
   // and update localStorage whenever the theme state changes.
-  useEffect(() => {
+    useEffect(() => {
     const root = document.documentElement; // Target the <html> element
     if (theme === 'dark') {
       root.classList.add('dark-mode');
@@ -22,7 +22,8 @@ export const ThemeProvider = ({ children }) => {
       root.classList.remove('dark-mode');
     }
     localStorage.setItem('theme', theme);
-  }, [theme]); // Re-run effect whenever 'theme' changes
+  }, [theme]);
+
 
   // Function to toggle between 'light' and 'dark' themes
   const toggleTheme = () => {
